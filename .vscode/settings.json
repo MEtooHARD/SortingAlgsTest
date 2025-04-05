@@ -46,7 +46,10 @@
         "string_view": "cpp",
         "unordered_map": "cpp",
         "variant": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "forward_list": "cpp",
+        "type_traits": "cpp",
+        "functional": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/clang++"
 }

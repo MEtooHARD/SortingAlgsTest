@@ -1,6 +1,4 @@
-#include "../sortings/sort.h"
-
-/* BASIC */
+/* Legacy */
 void swap(long &a, long &b) {
   long temp = a;
   a = b;
@@ -16,10 +14,7 @@ bool isOrdered(long *arr, long size) {
 
   return true;
 }
-/* BASIC */
 
-/* Quick Sort */
-// Hoare ver.
 long partition(long *arr, long low, long high) {
   long pivot = arr[high];
   long i = low;
@@ -45,9 +40,7 @@ void quickSort(long *arr, long low, long high) {
   }
 }
 void QuickSort(long *arr, long size) { quickSort(arr, 0, size - 1); }
-/* Quick Sort */
 
-/* Merge Sort */
 void merge(long *arr, long l, long m, long r) {
   long Ls = l, Le = m, Rs = m + 1, Re = r, k = 0;
   long n = r - l + 1;
@@ -76,4 +69,4 @@ void mergeSort(long *arr, long l, long r) {
   }
 }
 void MergeSort(long *arr, long size) { mergeSort(arr, 0, size - 1); }
-/* Merge Sort */
+/* Legacy */
