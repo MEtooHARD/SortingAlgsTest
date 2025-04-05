@@ -4,14 +4,14 @@
         {
             "label": "build cpp",
             "type": "shell",
-            "command": "clang++",
-            "args": [
-                "-std=c++17",
-                "-I./sortings",
-                "src/main.cpp",
-                "-o",
-                "main"
-            ],
+            "command": "clang++ -std=c++17 -I./sortings src/main.cpp -o main && ./main",
+            // "args": [
+            //     "-std=c++17",
+            //     "-I./sortings",
+            //     "src/main.cpp",
+            //     "-o",
+            //     "main"
+            // ],
             "group": "build",
             "problemMatcher": [
                 "$gcc"

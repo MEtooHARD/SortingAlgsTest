@@ -69,4 +69,12 @@ void mergeSort(long *arr, long l, long r) {
   }
 }
 void MergeSort(long *arr, long size) { mergeSort(arr, 0, size - 1); }
+
+// chrono::milliseconds testSortingAlgorithm(  // (this comment is for new line)
+//     function<void(long *, long)> sortFunc, long *arr, long size) {
+//   auto start = chrono::high_resolution_clock::now();
+//   sortFunc(arr, size);
+//   auto end = chrono::high_resolution_clock::now();
+//   return chrono::duration_cast<chrono::milliseconds>(end - start);
+// }
 /* Legacy */

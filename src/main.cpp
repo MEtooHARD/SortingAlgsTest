@@ -6,57 +6,39 @@
 
 using namespace std;
 
-chrono::milliseconds testSortingAlgorithm(  // (this comment is for new line)
-    function<void(long*, long)> sortFunc, long* arr, long size) {
-  auto start = chrono::high_resolution_clock::now();
-  sortFunc(arr, size);
-  auto end = chrono::high_resolution_clock::now();
-  return chrono::duration_cast<chrono::milliseconds>(end - start);
-}
-
-long* genArr(long size) {
-  long* arr = new long[size];
-  srand(time(0));
-  for (long i = 0; i < size; i++) arr[i] = rand() % 100;
+int *genIntArr(size_t size) {
+  int *arr = new int[size];
+  for (size_t i = 0; i < size; i++) arr[i] = static_cast<int>(rand() % INT_MAX);
 
   return arr;
 }
 
-enum SortingAlgs { MERGE_SORT, QUICK_SORT };
+long *genLongArr(size_t size) {
+  long *arr = new long[size];
+  for (size_t i = 0; i < size; i++) arr[i] = rand() % 2147;
 
-void test(long* arr, long N, SortingAlgs alg) {
-  // auto func = alg == SortingAlgs::MERGE_SORT ? MergeSort : QuickSort;
-
-  cout << "\tAlg: "
-       << (alg == SortingAlgs::MERGE_SORT ? "MergeSort" : "QuickSort") << '\n';
-  // auto duration = testSortingAlgorithm(QuickSort, arr, N);
-  // cout << '\t' << (isOrdered(arr, N) ? "✅ Pass" : "❌ Failed") << '\n';
-  // cout << "\tTime: " << duration.count() << " ms\n";
+  return arr;
 }
 
 int main() {
-  new QuickSort<int>(                  //
-      static_cast<unsigned short>(1),  //
-      [](int a, int b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
-  // for (long i = 1000; i <= 100000000; i *= 2) {
-  //   long* arr1 = genArr(i);
-  //   long* arr2 = new long[i];
-  //   std::copy(arr1, arr1 + i, arr2);
+  srand(time(0));
+  auto sort = new QuickSort<long>("Quick Sort", static_cast<unsigned short>(1),
+                                  [](long a, long b) {
+                                    if (a < b) return (char)-1;
+                                    if (a > b) return (char)1;
+                                    return (char)0;
+                                  });
 
-  //   cout << "Test\n";
-  //   cout << "\tN: " << i << '\n';
-  //   test(arr1, i, SortingAlgs::MERGE_SORT);
-  //   cout << "\t----------\n";
-  //   test(arr2, i, SortingAlgs::QUICK_SORT);
-  //   cout << '\n';
+  for (size_t i = 1000; i <= SIZE_T_MAX; i *= 2) {
+    cout << "Test size: " << i << endl;
+    long *arr1 = genLongArr(i);
+    // long* arr2 = new long[i];
+    // std::copy(arr1, arr1 + i, arr2);
+    sort->test(arr1, i);
+    cout << endl;
 
-  //   delete[] arr1;
-  //   delete[] arr2;
-  // }
+    delete[] arr1;
+  }
 
   return 1;
 }

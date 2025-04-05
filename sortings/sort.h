@@ -3,10 +3,9 @@
 
 #include <chrono>
 #include <functional>
+#include <string>
 
 #include "arr_manager.h"
-
-using namespace std;
 
 /* BASIC */
 template <typename T>
@@ -18,17 +17,30 @@ class SortAlg {
 
   Edge edge;
   Comparator compare;
+  std::string name;
   virtual void sorter(T *arr, size_t size) = 0;
 
  public:
-  SortAlg(Edge edge, Comparator comp) : edge(edge), compare(comp) {}
+  SortAlg(Edge edge, Comparator comp, std::string name)
+      : edge(edge), compare(comp), name(name) {}
 
-  chrono::milliseconds test(T *arr, size_t size) {
-    auto start = chrono::high_resolution_clock::now();
+  std::chrono::milliseconds test(T *arr, size_t size) {
+    // std::cout << "Size: " << size << std::endl;
+    std::cout << "Alg: " << name << std::endl;
+
+    auto start = std::chrono::high_resolution_clock::now();
     sorter(arr, size);
-    auto end = chrono::high_resolution_clock::now();
-    return chrono::duration_cast<chrono::milliseconds>(end - start);
-  };
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+    std::cout << "Result: " << (isOrdered(arr, size) ? "✅Pass" : "❌Fail")
+              << std::endl;
+    std::cout << "Time: " << duration.count() << " ms" << std::endl;
+
+    return duration;
+  }
 
  protected:
   void swap(T &a, T &b) {
@@ -63,7 +75,8 @@ class QuickSort : public SortAlg<T> {
   }
 
  public:
-  QuickSort(Edge edge, Comparator comp) : SortAlg<T>(edge, comp) {}
+  QuickSort(std::string name, Edge edge, Comparator comp)
+      : SortAlg<T>(edge, comp, name) {}
 
  protected:
   size_t partition(T *arr, size_t low, size_t high) {
@@ -109,8 +122,8 @@ class MergeSort : public SortAlg<T> {
   }
 
  public:
-  MergeSort(Edge edge, Comparator comp, bool reuseArr)
-      : SortAlg<T>(edge, comp), reuseArr(reuseArr) {}
+  MergeSort(std::string name, Edge edge, Comparator comp, bool reuseArr)
+      : SortAlg<T>(edge, comp, name), reuseArr(reuseArr) {}
 
  protected:
   void merge(T *arr, size_t l, size_t m, size_t r) {
