@@ -1,0 +1,79 @@
+#include "../sortings/sort.h"
+
+/* BASIC */
+void swap(long &a, long &b) {
+  long temp = a;
+  a = b;
+  b = temp;
+}
+
+bool isOrdered(long *arr, long size) {
+  long prev = arr[0];
+  for (long i = 1; i < size; i++) {
+    if (prev > arr[i]) return false;
+    prev = arr[i];
+  }
+
+  return true;
+}
+/* BASIC */
+
+/* Quick Sort */
+// Hoare ver.
+long partition(long *arr, long low, long high) {
+  long pivot = arr[high];
+  long i = low;
+  long j = high - 1;
+
+  while (true) {
+    while (i <= j && arr[i] <= pivot) i++;
+    while (j >= i && arr[j] > pivot) j--;
+    if (i >= j) break;
+    swap(arr[i], arr[j]);
+  }
+
+  swap(arr[i], arr[high]);
+  return i;
+}
+
+void quickSort(long *arr, long low, long high) {
+  if (low < high) {
+    long p = partition(arr, low, high);
+
+    quickSort(arr, low, p - 1);
+    quickSort(arr, p + 1, high);
+  }
+}
+void QuickSort(long *arr, long size) { quickSort(arr, 0, size - 1); }
+/* Quick Sort */
+
+/* Merge Sort */
+void merge(long *arr, long l, long m, long r) {
+  long Ls = l, Le = m, Rs = m + 1, Re = r, k = 0;
+  long n = r - l + 1;
+  long tempArr[n];
+
+  while (Ls <= Le && Rs <= Re)
+    if (arr[Ls] <= arr[Rs])
+      tempArr[k++] = arr[Ls++];
+    else
+      tempArr[k++] = arr[Rs++];
+
+  while (Rs <= Re) tempArr[k++] = arr[Rs++];
+  while (Ls <= Le) tempArr[k++] = arr[Ls++];
+
+  for (long j = l, i = 0; j <= r; i++, j++) arr[j] = tempArr[i];
+}
+
+void mergeSort(long *arr, long l, long r) {
+  if (l < r) {
+    long m = l + (r - l) / 2;
+
+    mergeSort(arr, l, m);
+    mergeSort(arr, m + 1, r);
+
+    merge(arr, l, m, r);
+  }
+}
+void MergeSort(long *arr, long size) { mergeSort(arr, 0, size - 1); }
+/* Merge Sort */
