@@ -57,6 +57,8 @@ class SortAlg {
 };
 /* BASIC */
 
+long recursion = 0;
+
 /* Quick Sort */
 template <typename T>
 class QuickSort : public SortAlg<T> {
@@ -64,11 +66,12 @@ class QuickSort : public SortAlg<T> {
   using typename Base::Comparator;
   using typename Base::Edge;
 
-  void sorter(T *arr, size_t size) { quickSort(arr, 0, size); }
+  void sorter(T *arr, size_t size) { quickSort(arr, 0, size - 1); }
 
   void quickSort(T *arr, size_t low, size_t high) {
+    // std::cout << recursion++;
     if (low < high) {
-      T p = partition(arr, low, high);
+      size_t p = partition(arr, low, high);
       quickSort(arr, low, p - 1);
       quickSort(arr, p + 1, high);
     }
