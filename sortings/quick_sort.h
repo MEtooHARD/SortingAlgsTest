@@ -20,7 +20,7 @@ class QuickSort : public SortAlg<T> {
   }
 
   std::string info() {
-    return Base::info() + "\nRecursion: " + (recursive ? "Yes" : "No") +
+    return Base::info() + "\nRecursive: " + (recursive ? "Yes" : "No") +
            "\nMedian of 3: " + (medianOf3 ? "Yes" : "No") +
            "\nRecursion limit: " + std::to_string(RCR_LIMIT);
   }

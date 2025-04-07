@@ -11,25 +11,14 @@
 
 using namespace std;
 
-QuickSort<long> *QS_Long_Lo3_R;
-QuickSort<int> *QS_Int_Lo3_R;
-QuickSort<short> *QS_Short_Lo3_R;
-
-QuickSort<long> *QS_Long_Mo3_R;
-QuickSort<int> *QS_Int_Mo3_R;
-QuickSort<short> *QS_Short_Mo3_R;
-
 template <typename T>
 typename std::enable_if<std::is_integral<T>::value, T *>::type  //
 genIntgrArr(size_t size) {
   T *arr = new T[size];
-  for (size_t i = 0; i < size; i++) arr[i] = static_cast<T>(rand() % 3000000);
+  for (size_t i = 0; i < size; i++) arr[i] = static_cast<T>(rand() % 100);
 
   return arr;
 }
-
-void init();
-void unitTestWith(size_t size);
 
 unsigned short EDGE = 0;
 size_t RCR_LIMIT = 10'000'000;  // 10M
@@ -47,99 +36,34 @@ size_t RCR_LIMIT = 10'000'000;  // 10M
  */
 
 int main() {
-  init();
   srand(time(0));
-
-  // QuickSort<int>::setRecursionLimit(10_000_000); // default 10M
-
-  auto sort = QS_Long_Mo3_R;
-  // SortAlg<long> *sortLong[2] = {QS_Long_Lo3_R, QS_Long_Mo3_R};
-  // SortAlg<int> *sortInt[2] = {QS_Int_Lo3_R, QS_Int_Mo3_R};
-  // SortAlg<short> *sortShort[2] = {QS_Short_Lo3_R, QS_Short_Mo3_R};
 
   for (size_t i = 1000; i <= SIZE_MAX; i *= 10) {
     cout << "Test size: " << i << endl << "====================" << endl;
-    long *arr1 = genIntgrArr<long>(i);
-    // long* arr2 = new long[i];
-    // std::copy(arr1, arr1 + i, arr2);
-    sort->test(arr1, i);
-    cout << endl;
+    int *refArr = genIntgrArr<int>(i);
+    int *testArr = new int[i];
 
-    delete[] arr1;
+    /* test with different config */
+    for (char m = 0; m < 2; m++) {
+      for (char r = 0; r < 2; r++) {
+        copy(refArr, refArr + i, testArr);
+
+        QuickSort<int>(  //
+            m, r, EDGE, RCR_LIMIT,
+            [](int a, int b) {
+              if (a < b) return (char)-1;
+              if (a > b) return (char)1;
+              return (char)0;
+            })  //
+            .test(testArr, i);
+      }
+    }
+
+    cout << endl << endl;
+
+    delete[] refArr;
+    delete[] testArr;
   }
 
   return 3;
-}
-
-void unitTestWith(size_t size) {
-  long *arr1 = genIntgrArr<long>(size);
-
-  cout << "Testing Long" << endl;
-  QS_Long_Lo3_R->test(arr1, size);
-  QS_Long_Mo3_R->test(arr1, size);
-  cout << endl;
-
-  int *arr2 = genIntgrArr<int>(size);
-
-  cout << "Testing Int" << endl;
-  QS_Int_Lo3_R->test(arr2, size);
-  QS_Int_Mo3_R->test(arr2, size);
-  cout << endl;
-
-  short *arr3 = genIntgrArr<short>(size);
-
-  cout << "Testing Short" << endl;
-  QS_Short_Lo3_R->test(arr3, size);
-  QS_Short_Mo3_R->test(arr3, size);
-  cout << endl;
-
-  delete[] arr1;
-  delete[] arr2;
-  delete[] arr3;
-}
-
-void init() {
-  QS_Long_Lo3_R = new QuickSort<long>(  //
-      false, true, EDGE, RCR_LIMIT,     //
-      [](long a, long b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
-  QS_Int_Lo3_R = new QuickSort<int>(  //
-      false, true, EDGE, RCR_LIMIT,   //
-      [](int a, int b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
-  QS_Short_Lo3_R = new QuickSort<short>(  //
-      false, true, EDGE, RCR_LIMIT,       //
-      [](short a, short b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
-
-  QS_Long_Mo3_R = new QuickSort<long>(  //
-      true, true, EDGE, RCR_LIMIT,      //
-      [](long a, long b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
-  QS_Int_Mo3_R = new QuickSort<int>(  //
-      true, true, EDGE, RCR_LIMIT,    //
-      [](int a, int b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
-  QS_Short_Mo3_R = new QuickSort<short>(  //
-      true, true, EDGE, RCR_LIMIT,        //
-      [](short a, short b) {
-        if (a < b) return (char)-1;
-        if (a > b) return (char)1;
-        return (char)0;
-      });
 }

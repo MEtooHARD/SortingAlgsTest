@@ -26,7 +26,7 @@ class SortAlg {
   SortAlg(Edge edg, Comparator comp, std::string name)
       : edge(edg), compare(comp), name(name) {}
 
-  std::chrono::milliseconds test(T *arr, size_t size) {
+  std::chrono::microseconds test(T *arr, size_t size) {
     // std::cout << "Size: " << size << std::endl;
     std::cout << info() << std::endl;
 
@@ -35,10 +35,11 @@ class SortAlg {
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
     std::cout << "Result: " << (isOrdered(arr, size) ? "Pass" : "Fail");
-    std::cout << "\nTime: " << duration.count() << " ms" << std::endl;
+    std::cout << "\nTime: " << duration.count() << " (micro sec)" << std::endl
+              << "==" << std::endl;
 
     return duration;
   }
