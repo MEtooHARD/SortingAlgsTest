@@ -2,17 +2,23 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build cpp",
+            "label": "build and test",
             "type": "shell",
-            "command": "clang++ -std=c++17 -I./sortings src/main.cpp -o main && ./main",
+            "command": 
+            "g++ -std=c++17 -I./sortings src/main.cpp -o main && ./main",
             // "args": [
             //     "-std=c++17",
             //     "-I./sortings",
             //     "src/main.cpp",
             //     "-o",
-            //     "main"
+            //     "main",
+            //     "&&",
+            //     "./main"
             // ],
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": [
                 "$gcc"
             ]

@@ -20,13 +20,15 @@ class SortAlg {
   std::string name;
   virtual void sorter(T *arr, size_t size) = 0;
 
+  virtual std::string info() { return "Alg: " + name; }
+
  public:
-  SortAlg(Edge edge, Comparator comp, std::string name)
-      : edge(edge), compare(comp), name(name) {}
+  SortAlg(Edge edg, Comparator comp, std::string name)
+      : edge(edg), compare(comp), name(name) {}
 
   std::chrono::milliseconds test(T *arr, size_t size) {
     // std::cout << "Size: " << size << std::endl;
-    std::cout << "Alg: " << name << std::endl;
+    std::cout << info() << std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
     sorter(arr, size);
@@ -35,9 +37,8 @@ class SortAlg {
     auto duration =
         std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-    std::cout << "Result: " << (isOrdered(arr, size) ? "✅Pass" : "❌Fail")
-              << std::endl;
-    std::cout << "Time: " << duration.count() << " ms" << std::endl;
+    std::cout << "Result: " << (isOrdered(arr, size) ? "Pass" : "Fail");
+    std::cout << "\nTime: " << duration.count() << " ms" << std::endl;
 
     return duration;
   }
@@ -48,57 +49,28 @@ class SortAlg {
     a = b;
     b = temp;
   }
+
   bool isOrdered(T *arr, size_t size) {
+    if (!arr || size <= 1) return true;
     for (size_t i = 1; i < size; i++)
       if (compare(arr[i - 1], arr[i]) > 0) return false;
 
     return true;
   }
+
+  void insertionSort(T *arr, size_t l, size_t r) {
+    for (size_t i = l + 1; i <= r; i++) {
+      T key = arr[i];
+      size_t j = i;
+      while (j > l && this->compare(arr[j - 1], key) > 0) {
+        arr[j] = arr[j - 1];
+        j--;
+      }
+      arr[j] = key;
+    }
+  }
 };
 /* BASIC */
-
-long recursion = 0;
-
-/* Quick Sort */
-template <typename T>
-class QuickSort : public SortAlg<T> {
-  using Base = SortAlg<T>;
-  using typename Base::Comparator;
-  using typename Base::Edge;
-
-  void sorter(T *arr, size_t size) { quickSort(arr, 0, size - 1); }
-
-  void quickSort(T *arr, size_t low, size_t high) {
-    // std::cout << recursion++;
-    if (low < high) {
-      size_t p = partition(arr, low, high);
-      quickSort(arr, low, p - 1);
-      quickSort(arr, p + 1, high);
-    }
-  }
-
- public:
-  QuickSort(std::string name, Edge edge, Comparator comp)
-      : SortAlg<T>(edge, comp, name) {}
-
- protected:
-  size_t partition(T *arr, size_t low, size_t high) {
-    size_t pivot = arr[high];
-    size_t i = low;
-    size_t j = high - 1;
-
-    while (true) {
-      while (i <= j && this->compare(arr[i], pivot) <= 0) i++;
-      while (j >= i && this->compare(arr[j], pivot) > 0) j--;
-      if (i >= j) break;
-      this->swap(arr[i], arr[j]);
-    }
-
-    this->swap(arr[i], arr[high]);
-    return i;
-  }
-};
-/* Quick Sort */
 
 /* Merge Sort */
 template <typename T>
@@ -125,8 +97,8 @@ class MergeSort : public SortAlg<T> {
   }
 
  public:
-  MergeSort(std::string name, Edge edge, Comparator comp, bool reuseArr)
-      : SortAlg<T>(edge, comp, name), reuseArr(reuseArr) {}
+  MergeSort(std::string name, Edge edge, Comparator comp, bool rusArr)
+      : SortAlg<T>(edge, comp, name), reuseArr(rusArr) {}
 
  protected:
   void merge(T *arr, size_t l, size_t m, size_t r) {
